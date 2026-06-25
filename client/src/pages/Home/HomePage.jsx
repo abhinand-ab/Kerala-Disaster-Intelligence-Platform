@@ -1,28 +1,56 @@
 import MainLayout from "../../components/layout/MainLayout";
+import SectionHeader from "../../components/common/SectionHeader";
+import StatCard from "../../components/common/StatCard";
+
+import {
+  TriangleAlert,
+  CloudRain,
+  Truck,
+  Wind,
+} from "lucide-react";
 
 const HomePage = () => {
   return (
     <MainLayout>
-      <h1 className="text-3xl font-bold mb-6">
-        Dashboard
-      </h1>
+      <SectionHeader
+        title="Dashboard"
+        subtitle="Real-time overview of Kerala disaster and delivery operations"
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          Active Incidents
-        </div>
 
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          Flood Alerts
-        </div>
+        <StatCard
+          title="Active Incidents"
+          value="24"
+          subtitle="+8 today"
+          color="bg-red-100"
+          icon={<TriangleAlert className="text-red-600" />}
+        />
 
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          Drivers Online
-        </div>
+        <StatCard
+          title="Flood Alerts"
+          value="6"
+          subtitle="2 Critical"
+          color="bg-blue-100"
+          icon={<CloudRain className="text-blue-600" />}
+        />
 
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          AQI Status
-        </div>
+        <StatCard
+          title="Drivers Online"
+          value="58"
+          subtitle="Live Tracking"
+          color="bg-emerald-100"
+          icon={<Truck className="text-emerald-600" />}
+        />
+
+        <StatCard
+          title="Average AQI"
+          value="72"
+          subtitle="Moderate"
+          color="bg-amber-100"
+          icon={<Wind className="text-amber-600" />}
+        />
+
       </div>
     </MainLayout>
   );
