@@ -1,6 +1,10 @@
 import MainLayout from "../../components/layout/MainLayout";
 import SectionHeader from "../../components/common/SectionHeader";
 import StatCard from "../../components/common/StatCard";
+import MapSection from "../../components/dashboard/MapSection";
+import RightPanel from "../../components/dashboard/RightPanel";
+import RecentIncidents from "../../components/dashboard/RecentIncidents";
+import QuickActions from "../../components/dashboard/QuickActions";
 
 import {
   TriangleAlert,
@@ -50,6 +54,37 @@ const HomePage = () => {
           color="bg-amber-100"
           icon={<Wind className="text-amber-600" />}
         />
+
+      </div>
+      <div className="grid grid-cols-12 gap-6 mt-8">
+
+        <div className="col-span-12 lg:col-span-8">
+
+          <MapSection />
+
+        </div>
+
+        <div className="col-span-12 lg:col-span-4">
+
+          <RightPanel />
+
+        </div>
+
+      </div>
+
+      <div className="grid grid-cols-12 gap-6 mt-6">
+
+        <div className="col-span-12 lg:col-span-8">
+
+          <RecentIncidents />
+
+        </div>
+
+        <div className="col-span-12 lg:col-span-4">
+
+          <QuickActions />
+
+        </div>
 
       </div>
     </MainLayout>
