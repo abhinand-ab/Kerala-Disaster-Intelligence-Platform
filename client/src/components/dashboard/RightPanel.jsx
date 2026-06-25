@@ -1,4 +1,5 @@
 import Card from "../common/Card";
+import WeatherWidget from "./widgets/WeatherWidget";
 
 const RightPanel = () => {
   return (
@@ -31,6 +32,8 @@ const RightPanel = () => {
         </p>
 
       </Card>
+
+      <WeatherWidget />
 
       <Card>
 
