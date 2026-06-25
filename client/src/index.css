@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
+:root {
+  font-family: "Inter", sans-serif;
+
+  --primary: #2563eb;
+  --secondary: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+
+  --background: #f8fafc;
+  --card: #ffffff;
+
+  --text: #0f172a;
+  --text-secondary: #475569;
+
+  --border: #e2e8f0;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+}
