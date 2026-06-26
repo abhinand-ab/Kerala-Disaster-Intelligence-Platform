@@ -19,6 +19,7 @@ export const createIncident = async (req, res) => {
       data: incident,
     });
   } catch (error) {
+    console.error("CREATE INCIDENT ERROR:");
     console.error(error);
 
     res.status(500).json({
