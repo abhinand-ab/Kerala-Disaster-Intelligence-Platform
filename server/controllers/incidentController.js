@@ -1,4 +1,5 @@
 import Incident from "../models/Incident.js";
+import { getSocketIO } from "../sockets/socket.js";
 
 /*
 =========================================
@@ -12,6 +13,14 @@ export const createIncident = async (req, res) => {
       ...req.body,
       reportedBy: req.user._id,
     });
+
+    try {
+      const io = getSocketIO();
+      io.emit("incidentCreated", incident);
+    } catch (socketError) {
+      console.warn("Socket.IO broadcast skipped:");
+      console.warn(socketError.message);
+    }
 
     res.status(201).json({
       success: true,

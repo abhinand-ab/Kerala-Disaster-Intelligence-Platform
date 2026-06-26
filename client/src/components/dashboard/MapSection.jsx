@@ -6,8 +6,8 @@ const MapSection = () => {
   return (
     <Card className="h-[650px] flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div>
+      <div className="mb-4 flex items-start justify-between">
+        <div className="space-y-1">
           <h2 className="text-xl font-semibold text-slate-800">
             Kerala Operations Map
           </h2>
@@ -16,16 +16,16 @@ const MapSection = () => {
           </p>
         </div>
 
-        <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-          Live
-        </span>
-
-         <LayerSwitcher />
-
+        <div className="flex items-center gap-4">
+          <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+            Live
+          </span>
+          <LayerSwitcher />
+        </div>
       </div>
 
       {/* Map */}
-      <div className="flex-1 overflow-hidden rounded-xl border border-slate-200">
+      <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-slate-200">
         <MapView />
       </div>
     </Card>
