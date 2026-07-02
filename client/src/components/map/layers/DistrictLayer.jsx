@@ -41,14 +41,14 @@ const DistrictLayer = () => {
   };
 
   if (!districts) return null;
-
-  return (
-    <GeoJSON
-      data={districts}
-      style={defaultStyle}
-      onEachFeature={onEachDistrict}
-    />
-  );
+return (
+  <GeoJSON
+    data={districts}
+    style={defaultStyle}
+    onEachFeature={onEachDistrict}
+    interactive={false}
+  />
+);
 };
 
 export default DistrictLayer;
