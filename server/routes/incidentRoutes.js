@@ -12,7 +12,6 @@ import {
 
 import {
   protect,
-  adminOnly,
 } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -36,12 +35,12 @@ router.post("/", protect, createIncident);
 router.put("/:id", protect, updateIncident);
 
 // Delete incident (Admin only)
-router.delete("/:id", protect, adminOnly, deleteIncident);
+router.delete("/:id", protect,  deleteIncident);
 
 // Update incident status
 router.patch("/:id/status", protect, updateIncidentStatus);
 
 // Assign volunteer (Admin only)
-router.patch("/:id/assign", protect, adminOnly, assignVolunteer);
+router.patch("/:id/assign", protect, assignVolunteer);
 
 export default router;

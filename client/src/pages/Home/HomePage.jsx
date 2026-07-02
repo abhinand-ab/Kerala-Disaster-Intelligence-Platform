@@ -5,6 +5,7 @@ import MapSection from "../../components/dashboard/MapSection";
 import RightPanel from "../../components/dashboard/RightPanel";
 import RecentIncidents from "../../components/dashboard/RecentIncidents";
 import QuickActions from "../../components/dashboard/QuickActions";
+import useDashboard from "../../hooks/useDashboard";
 
 import {
   TriangleAlert,
@@ -14,6 +15,8 @@ import {
 } from "lucide-react";
 
 const HomePage = () => {
+  const { data, isLoading, error } = useDashboard();
+
   return (
     <MainLayout>
       <SectionHeader
@@ -25,7 +28,7 @@ const HomePage = () => {
 
         <StatCard
           title="Active Incidents"
-          value="24"
+          value={isLoading || error ? "--" : data?.activeIncidents ?? 0}
           subtitle="+8 today"
           color="bg-red-100"
           icon={<TriangleAlert className="text-red-600" />}
@@ -33,7 +36,7 @@ const HomePage = () => {
 
         <StatCard
           title="Flood Alerts"
-          value="6"
+          value={isLoading || error ? "--" : data?.floodIncidents ?? 0}
           subtitle="2 Critical"
           color="bg-blue-100"
           icon={<CloudRain className="text-blue-600" />}

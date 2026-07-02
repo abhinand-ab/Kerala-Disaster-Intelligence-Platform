@@ -1,5 +1,50 @@
 import Incident from "../models/Incident.js";
+import Notification from "../models/Notification.js";
+import User from "../models/User.js";
 import { getSocketIO } from "../sockets/socket.js";
+
+const emitIncidentSocketEvent = (eventName, payload) => {
+  try {
+    const io = getSocketIO();
+    io.emit(eventName, payload);
+  } catch (socketError) {
+    console.warn("Socket.IO broadcast skipped:");
+    console.warn(socketError.message);
+  }
+};
+
+const createAndEmitNotification = async ({
+  user,
+  title,
+  message,
+  type,
+  incident,
+}) => {
+  try {
+    const notification = await Notification.create({
+      user,
+      title,
+      message,
+      type,
+      incident,
+    });
+
+    try {
+      const io = getSocketIO();
+      io.to(user.toString()).emit("notificationCreated", notification);
+    } catch (socketError) {
+      console.warn("Notification socket emit skipped:");
+      console.warn(socketError.message);
+    }
+
+    return notification;
+  } catch (notificationError) {
+    console.warn("Notification creation skipped:");
+    console.warn(notificationError.message);
+
+    return null;
+  }
+};
 
 /*
 =========================================
@@ -14,13 +59,21 @@ export const createIncident = async (req, res) => {
       reportedBy: req.user._id,
     });
 
-    try {
-      const io = getSocketIO();
-      io.emit("incidentCreated", incident);
-    } catch (socketError) {
-      console.warn("Socket.IO broadcast skipped:");
-      console.warn(socketError.message);
-    }
+    const admins = await User.find({ role: "admin" }).select("_id");
+
+    await Promise.all(
+      admins.map((admin) =>
+        createAndEmitNotification({
+          user: admin._id,
+          title: "New Incident Reported",
+          message: `A new incident has been reported: ${incident.title}`,
+          type: "incident",
+          incident: incident._id,
+        })
+      )
+    );
+
+    emitIncidentSocketEvent("incidentCreated", incident);
 
     res.status(201).json({
       success: true,
@@ -123,6 +176,8 @@ export const updateIncident = async (req, res) => {
       });
     }
 
+    emitIncidentSocketEvent("incidentUpdated", incident);
+
     res.status(200).json({
       success: true,
       message: "Incident updated successfully.",
@@ -156,6 +211,8 @@ export const deleteIncident = async (req, res) => {
     }
 
     await incident.deleteOne();
+
+    emitIncidentSocketEvent("incidentDeleted", incident._id);
 
     res.status(200).json({
       success: true,
@@ -193,6 +250,16 @@ export const updateIncidentStatus = async (req, res) => {
     incident.status = status;
 
     await incident.save();
+
+    await createAndEmitNotification({
+      user: incident.reportedBy,
+      title: "Incident Status Updated",
+      message: `Status changed to ${status}`,
+      type: "status",
+      incident: incident._id,
+    });
+
+    emitIncidentSocketEvent("incidentStatusUpdated", incident);
 
     res.status(200).json({
       success: true,
@@ -232,6 +299,16 @@ export const assignVolunteer = async (req, res) => {
     incident.status = "Assigned";
 
     await incident.save();
+
+    await createAndEmitNotification({
+      user: volunteerId,
+      title: "Incident Assigned",
+      message: `You have been assigned to incident: ${incident.title}`,
+      type: "assignment",
+      incident: incident._id,
+    });
+
+    emitIncidentSocketEvent("incidentAssigned", incident);
 
     res.status(200).json({
       success: true,

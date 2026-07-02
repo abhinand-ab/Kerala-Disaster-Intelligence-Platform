@@ -21,3 +21,51 @@ export const createIncident = async (incident) => {
 
   return res.data.data;
 };
+
+export const updateIncident = async (id, data) => {
+  const res = await axios.put(`${API}/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  return res.data.data;
+};
+
+export const deleteIncident = async (id) => {
+  const res = await axios.delete(`${API}/${id}`, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  return res.data.data;
+};
+
+export const updateIncidentStatus = async (id, status) => {
+  const res = await axios.patch(
+    `${API}/${id}/status`,
+    { status },
+    {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    }
+  );
+
+  return res.data.data;
+};
+
+export const assignVolunteer = async (id, volunteerId) => {
+  const res = await axios.patch(
+    `${API}/${id}/assign`,
+    { volunteerId },
+    {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    }
+  );
+
+  return res.data.data;
+};

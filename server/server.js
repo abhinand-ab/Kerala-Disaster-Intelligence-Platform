@@ -4,8 +4,11 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { Server } from "socket.io";
 import authRoutes from "./routes/authRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 import incidentRoutes from "./routes/incidentRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
 import { setSocketIO } from "./sockets/socket.js";
+import userRoutes from "./routes/userRoutes.js";
 
 import connectDB from "./config/db.js";
 
@@ -29,6 +32,13 @@ setSocketIO(io);
 
 io.on("connection", (socket) => {
   console.log("Client Connected");
+
+  socket.on("join", (userId) => {
+    if (!userId) return;
+
+    socket.join(userId);
+    console.log(`User ${userId} joined notification room.`);
+  });
 
   socket.on("disconnect", () => {
     console.log("Client Disconnected");
@@ -54,7 +64,10 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/incidents", incidentRoutes);
+app.use("/api/notifications", notificationRoutes);
 // Future Routes
 // app.use("/api/auth", authRoutes);
 // app.use("/api/incidents", incidentRoutes);
