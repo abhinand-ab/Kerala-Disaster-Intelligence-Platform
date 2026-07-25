@@ -42,6 +42,8 @@ const allowedOrigins = [
   "http://localhost:5174",
 ].filter(Boolean);
 
+console.log("Allowed Origins:", allowedOrigins);
+
 // Connect Database
 connectDB().then(() => {
   seedSensors();
