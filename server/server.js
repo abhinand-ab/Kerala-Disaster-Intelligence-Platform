@@ -34,6 +34,14 @@ import connectDB from "./config/db.js";
 
 dotenv.config();
 
+// Build allowed origins list from environment variables.
+// Supports multiple origins for local dev + production deployment.
+const allowedOrigins = [
+  process.env.CLIENT_URL || "http://localhost:5173",
+  process.env.CLIENT_URL_PRODUCTION,
+  "http://localhost:5174",
+].filter(Boolean);
+
 // Connect Database
 connectDB().then(() => {
   seedSensors();
@@ -45,8 +53,8 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
     credentials: true,
   },
 });
@@ -71,7 +79,14 @@ io.on("connection", (socket) => {
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
   credentials: true,
 }));
 
@@ -110,7 +125,7 @@ app.use("/api/command-center", commandCenterRoutes);
 app.use("/api/public", publicRoutes);
 app.use("/api/audit", auditRoutes);
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
