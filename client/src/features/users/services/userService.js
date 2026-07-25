@@ -1,11 +1,12 @@
 import axios from "axios";
+import { API_BASE_URL } from "../../../config/api";
 
 export const getVolunteers = async () => {
 	try {
 		const token = localStorage.getItem("token");
 
 		const response = await axios.get(
-			"http://localhost:5000/api/users/volunteers",
+			`${API_BASE_URL}/api/users/volunteers`,
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,

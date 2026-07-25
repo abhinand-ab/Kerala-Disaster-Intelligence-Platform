@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 
-export const API = "http://localhost:5000/api/auth";
+export const API = `${API_BASE_URL}/api/auth`;
 
 export async function login(credentials) {
 	try {
@@ -38,7 +39,7 @@ export async function updateProfile(profileData) {
 	try {
 		const token = localStorage.getItem("token");
 		const response = await axios.put(
-			"http://localhost:5000/api/users/profile",
+			`${API_BASE_URL}/api/users/profile`,
 			profileData,
 			{
 				headers: {

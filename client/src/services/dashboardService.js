@@ -1,11 +1,12 @@
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 
 // Fetch dashboard analytics from the backend API.
 export const getDashboardAnalytics = async () => {
 	try {
 		const token = localStorage.getItem("token");
 
-		const response = await axios.get("http://localhost:5000/api/dashboard", {
+		const response = await axios.get(`${API_BASE_URL}/api/dashboard`, {
 			headers: {
 				Authorization: token ? `Bearer ${token}` : undefined,
 			},

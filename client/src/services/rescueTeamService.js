@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 
-const API = "http://localhost:5000/api/rescue-teams";
+const API = `${API_BASE_URL}/api/rescue-teams`;
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem("token");
