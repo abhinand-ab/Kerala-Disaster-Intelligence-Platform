@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+import { logUnauthorizedAccess } from "../services/activityLogger.js";
+
 export const protect = async (req, res, next) => {
   let token;
 
@@ -48,6 +50,8 @@ export const protect = async (req, res, next) => {
 // Admin Only Middleware
 export const adminOnly = (req, res, next) => {
   if (req.user.role !== "admin") {
+    // Log unauthorized access attempt
+    logUnauthorizedAccess(req, "System", "Admin authorization privilege violation");
     return res.status(403).json({
       success: false,
       message: "Access denied. Admin only.",

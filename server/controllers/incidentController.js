@@ -2,6 +2,9 @@ import Incident from "../models/Incident.js";
 import Notification from "../models/Notification.js";
 import User from "../models/User.js";
 import { getSocketIO } from "../sockets/socket.js";
+import { updateAllDistrictsRisk } from "../services/riskEngine.js";
+import { generateSmartAssignment } from "../services/aiDecisionEngine.js";
+import { logActivity } from "../services/activityLogger.js";
 
 const emitIncidentSocketEvent = (eventName, payload) => {
   try {
@@ -10,6 +13,36 @@ const emitIncidentSocketEvent = (eventName, payload) => {
   } catch (socketError) {
     console.warn("Socket.IO broadcast skipped:");
     console.warn(socketError.message);
+  }
+};
+
+const handlePublicIncidentEmits = (incident) => {
+  if (incident && incident.verificationStatus === true) {
+    const publicIncident = {
+      _id: incident._id,
+      title: incident.title,
+      description: incident.description,
+      category: incident.category,
+      severity: incident.severity,
+      location: incident.location,
+      status: incident.status,
+      images: incident.images,
+      createdAt: incident.createdAt
+    };
+    emitIncidentSocketEvent("publicIncidentUpdate", publicIncident);
+    if (["High", "Critical"].includes(incident.severity) && incident.status !== "Resolved") {
+      emitIncidentSocketEvent("publicAlert", {
+        id: incident._id,
+        source: "incident",
+        type: `${incident.category} Alert`,
+        severity: incident.severity,
+        message: incident.description,
+        district: incident.location.district,
+        latitude: incident.location.latitude,
+        longitude: incident.location.longitude,
+        timestamp: incident.createdAt
+      });
+    }
   }
 };
 
@@ -49,7 +82,6 @@ const createAndEmitNotification = async ({
 /*
 =========================================
 Create Incident
-POST /api/incidents
 =========================================
 */
 export const createIncident = async (req, res) => {
@@ -74,6 +106,31 @@ export const createIncident = async (req, res) => {
     );
 
     emitIncidentSocketEvent("incidentCreated", incident);
+    handlePublicIncidentEmits(incident);
+
+    // Trigger AI Decision Support smart assignment recommendations for the new incident
+    generateSmartAssignment("Incident", incident._id).catch((err) =>
+      console.error("AI Smart Assignment failed for incident:", err.message)
+    );
+
+    // Trigger risk engine recalculation on new incident
+    updateAllDistrictsRisk().catch((err) =>
+      console.error("Risk update failed after incident creation:", err)
+    );
+
+    logActivity({
+      userId: req.user?._id || req.user?.id,
+      userEmail: req.user?.email || "",
+      userRole: req.user?.role || "guest",
+      action: "Create Incident",
+      module: "Incident",
+      targetId: incident._id.toString(),
+      targetType: "Incident",
+      description: `Reported incident: ${incident.title} (Severity: ${incident.severity})`,
+      ipAddress: req.ip || req.headers["x-forwarded-for"] || "",
+      userAgent: req.headers["user-agent"] || "",
+      severity: ["High", "Critical"].includes(incident.severity) ? "High" : "Low"
+    }).catch(err => console.error("Audit log creation error:", err));
 
     res.status(201).json({
       success: true,
@@ -177,6 +234,26 @@ export const updateIncident = async (req, res) => {
     }
 
     emitIncidentSocketEvent("incidentUpdated", incident);
+    handlePublicIncidentEmits(incident);
+
+    // Trigger risk engine recalculation on incident edit
+    updateAllDistrictsRisk().catch((err) =>
+      console.error("Risk update failed after incident update:", err)
+    );
+
+    logActivity({
+      userId: req.user?._id || req.user?.id,
+      userEmail: req.user?.email || "",
+      userRole: req.user?.role || "guest",
+      action: "Update Incident",
+      module: "Incident",
+      targetId: incident._id.toString(),
+      targetType: "Incident",
+      description: `Updated incident properties for: ${incident.title}`,
+      ipAddress: req.ip || req.headers["x-forwarded-for"] || "",
+      userAgent: req.headers["user-agent"] || "",
+      severity: "Low"
+    }).catch(err => console.error("Audit log creation error:", err));
 
     res.status(200).json({
       success: true,
@@ -260,6 +337,26 @@ export const updateIncidentStatus = async (req, res) => {
     });
 
     emitIncidentSocketEvent("incidentStatusUpdated", incident);
+    handlePublicIncidentEmits(incident);
+
+    // Trigger risk engine recalculation on status update
+    updateAllDistrictsRisk().catch((err) =>
+      console.error("Risk update failed after incident status change:", err)
+    );
+
+    logActivity({
+      userId: req.user?._id || req.user?.id,
+      userEmail: req.user?.email || "",
+      userRole: req.user?.role || "guest",
+      action: "Update Incident Status",
+      module: "Incident",
+      targetId: incident._id.toString(),
+      targetType: "Incident",
+      description: `Transitioned incident status for "${incident.title}" to "${status}"`,
+      ipAddress: req.ip || req.headers["x-forwarded-for"] || "",
+      userAgent: req.headers["user-agent"] || "",
+      severity: "Low"
+    }).catch(err => console.error("Audit log creation error:", err));
 
     res.status(200).json({
       success: true,
@@ -309,6 +406,20 @@ export const assignVolunteer = async (req, res) => {
     });
 
     emitIncidentSocketEvent("incidentAssigned", incident);
+
+    logActivity({
+      userId: req.user?._id || req.user?.id,
+      userEmail: req.user?.email || "",
+      userRole: req.user?.role || "guest",
+      action: "Volunteer Assignment",
+      module: "Volunteer",
+      targetId: volunteerId,
+      targetType: "User",
+      description: `Assigned volunteer (ID: ${volunteerId}) to incident: "${incident.title}"`,
+      ipAddress: req.ip || req.headers["x-forwarded-for"] || "",
+      userAgent: req.headers["user-agent"] || "",
+      severity: "Low"
+    }).catch(err => console.error("Audit log creation error:", err));
 
     res.status(200).json({
       success: true,

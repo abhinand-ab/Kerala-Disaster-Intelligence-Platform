@@ -1,4 +1,6 @@
 import Incident from "../models/Incident.js";
+import Volunteer from "../models/Volunteer.js";
+import RescueTeam from "../models/RescueTeam.js";
 
 export const getDashboardAnalytics = async (req, res) => {
 	try {
@@ -10,6 +12,11 @@ export const getDashboardAnalytics = async (req, res) => {
 			floodIncidents,
 			fireIncidents,
 			medicalIncidents,
+			totalVolunteers,
+			availableVolunteers,
+			totalRescueTeams,
+			availableRescueTeams,
+			onMissionRescueTeams,
 		] = await Promise.all([
 			Incident.countDocuments(),
 			Incident.countDocuments({
@@ -22,6 +29,16 @@ export const getDashboardAnalytics = async (req, res) => {
 			Incident.countDocuments({ category: "Flood" }),
 			Incident.countDocuments({ category: "Fire" }),
 			Incident.countDocuments({ category: "Medical" }),
+			Volunteer.countDocuments(),
+			Volunteer.countDocuments({
+				$or: [
+					{ status: "Available" },
+					{ availability: true }
+				]
+			}),
+			RescueTeam.countDocuments(),
+			RescueTeam.countDocuments({ status: "Available" }),
+			RescueTeam.countDocuments({ status: "On Mission" }),
 		]);
 
 		return res.status(200).json({
@@ -34,6 +51,11 @@ export const getDashboardAnalytics = async (req, res) => {
 				floodIncidents,
 				fireIncidents,
 				medicalIncidents,
+				totalVolunteers,
+				availableVolunteers,
+				totalRescueTeams,
+				availableRescueTeams,
+				onMissionRescueTeams,
 			},
 		});
 	} catch (error) {

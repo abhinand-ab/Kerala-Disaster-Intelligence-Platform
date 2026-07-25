@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
@@ -7,6 +8,7 @@ import { login } from "../../services/authService";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
+	const { t, i18n } = useTranslation();
 	const { login: setAuthUser } = useAuth();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -21,17 +23,28 @@ export default function LoginPage() {
 			const response = await login({ email, password });
 			localStorage.setItem("token", response.token);
 			setAuthUser(response.user);
-			toast.success("Login successful");
+			toast.success(t("notifications.success", "Login successful"));
 			navigate("/");
 		} catch (error) {
-			toast.error(error);
+			toast.error(error || t("notifications.error", "Something went wrong. Please try again."));
 		} finally {
 			setLoading(false);
 		}
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 px-4 py-10 text-white sm:px-6 lg:px-8">
+		<div dir={i18n.dir()} className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 px-4 py-10 text-white sm:px-6 lg:px-8 relative">
+			<div className="absolute top-4 right-4 z-50">
+				<select
+					value={i18n.language?.startsWith("ml") ? "ml" : "en"}
+					onChange={(e) => i18n.changeLanguage(e.target.value)}
+					className="px-2.5 py-1.5 rounded-lg border border-white/10 bg-slate-900 text-white text-xs font-semibold outline-none cursor-pointer hover:border-white/20 transition"
+				>
+					<option value="en">English</option>
+					<option value="ml">മലയാളം</option>
+				</select>
+			</div>
+
 			<div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl items-center justify-center">
 				<div className="grid w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl shadow-cyan-950/30 backdrop-blur-xl lg:grid-cols-[1.1fr_0.9fr]">
 					<div className="hidden flex-col justify-between bg-gradient-to-br from-cyan-500/20 via-sky-500/10 to-transparent p-10 lg:flex">
@@ -41,7 +54,7 @@ export default function LoginPage() {
 								Real-time disaster intelligence
 							</div>
 							<h1 className="max-w-lg text-4xl font-semibold tracking-tight text-white xl:text-5xl">
-								Kerala Disaster Intelligence Platform
+								{t("navbar.title", "Kerala Disaster Intelligence Platform")}
 							</h1>
 							<p className="mt-4 max-w-lg text-base leading-7 text-slate-300">
 								Streamline response coordination, monitor incidents, and stay ahead with a secure operations dashboard built for critical situations.
@@ -66,7 +79,7 @@ export default function LoginPage() {
 									<LogIn className="h-7 w-7" />
 								</div>
 								<h2 className="text-3xl font-semibold tracking-tight text-white">
-									Kerala Disaster Intelligence Platform
+									{t("navbar.title", "Kerala Disaster Intelligence Platform")}
 								</h2>
 								<p className="mt-3 text-sm text-slate-400">Sign in to continue</p>
 							</div>
@@ -74,7 +87,7 @@ export default function LoginPage() {
 							<form onSubmit={handleSubmit} className="space-y-5">
 								<div>
 									<label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-200">
-										Email
+										{t("login.email", "Email Address")}
 									</label>
 									<input
 										id="email"
@@ -89,7 +102,7 @@ export default function LoginPage() {
 
 								<div>
 									<label htmlFor="password" className="mb-2 block text-sm font-medium text-slate-200">
-										Password
+										{t("login.password", "Password")}
 									</label>
 									<div className="relative">
 										<input
@@ -115,21 +128,31 @@ export default function LoginPage() {
 								<button
 									type="submit"
 									disabled={loading}
-									className="flex w-full items-center justify-center gap-2 rounded-2xl bg-cyan-500 px-4 py-3.5 font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-70"
+									className="flex w-full items-center justify-center gap-2 rounded-2xl bg-cyan-500 px-4 py-3.5 font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-70 border-0 cursor-pointer"
 								>
-									{loading ? "Signing In..." : "Login"}
+									{loading ? t("forms.buttons.submit", "Signing In...") : t("login.submit", "Login")}
 								</button>
 							</form>
 
 							<p className="mt-8 text-center text-sm text-slate-400">
-								Don't have an account?{" "}
+								{t("login.registerPrompt", "Don't have an account?")}{" "}
 								<Link
 									to="/register"
-									className="font-medium text-cyan-300 transition hover:text-cyan-200 hover:underline"
+									className="font-medium text-cyan-200 transition hover:text-cyan-100 hover:underline"
 								>
-									Register
+									{t("registration.submit", "Register")}
 								</Link>
 							</p>
+
+							<div className="mt-6 pt-6 border-t border-white/10 text-center">
+								<span className="text-xs text-slate-500 block mb-2.5">Access general citizens relief advisory board</span>
+								<Link
+									to="/public"
+									className="inline-flex items-center gap-1 px-4 py-2 border border-cyan-500/30 rounded-xl text-cyan-400 hover:text-cyan-300 font-semibold text-xs transition bg-cyan-900/10"
+								>
+									🛡️ Open Citizens Portal
+								</Link>
+							</div>
 						</div>
 					</div>
 				</div>

@@ -1,6 +1,11 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import {
+  recordFailedLogin,
+  recordSuccessfulLogin,
+  logActivity
+} from "../services/activityLogger.js";
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -59,6 +64,22 @@ export const registerUser = async (req, res) => {
       role,
     });
 
+    const ip = req.ip || req.headers["x-forwarded-for"] || "";
+    const userAgent = req.headers["user-agent"] || "";
+    await logActivity({
+      userId: user._id,
+      userEmail: user.email,
+      userRole: user.role,
+      action: "Register",
+      module: "Auth",
+      targetId: user._id.toString(),
+      targetType: "User",
+      description: `New user ${user.name} signed up`,
+      ipAddress: ip,
+      userAgent,
+      severity: "Info"
+    });
+
     res.status(201).json({
       success: true,
       message: "Registration successful.",
@@ -91,13 +112,35 @@ export const loginUser = async (req, res) => {
       password,
     } = req.body;
 
+    const ip = req.ip || req.headers["x-forwarded-for"] || "";
+    const userAgent = req.headers["user-agent"] || "";
+
     // Find User
     const user = await User.findOne({ email });
 
     if (!user) {
+      await recordFailedLogin(email, ip, userAgent);
       return res.status(401).json({
         success: false,
         message: "Invalid email or password.",
+      });
+    }
+
+    if (user.isActive === false) {
+      await logActivity({
+        userId: user._id,
+        userEmail: user.email,
+        userRole: user.role,
+        action: "Locked Account Login Attempt",
+        module: "Auth",
+        description: `Blocked login attempt for locked account: ${email}`,
+        ipAddress: ip,
+        userAgent,
+        severity: "Medium"
+      });
+      return res.status(403).json({
+        success: false,
+        message: "This account is temporarily locked due to multiple failed login attempts. Please contact an administrator.",
       });
     }
 
@@ -108,11 +151,14 @@ export const loginUser = async (req, res) => {
     );
 
     if (!isMatch) {
+      await recordFailedLogin(email, ip, userAgent);
       return res.status(401).json({
         success: false,
         message: "Invalid email or password.",
       });
     }
+
+    await recordSuccessfulLogin(user, ip, userAgent);
 
     res.status(200).json({
       success: true,

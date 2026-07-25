@@ -16,7 +16,7 @@ const RecentIncidents = () => {
   return (
     <>
       <Card>
-        <h2 className="font-semibold mb-4">
+        <h2 className="font-semibold mb-4 text-slate-900">
           Recent Incidents
         </h2>
 

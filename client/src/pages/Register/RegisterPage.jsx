@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
 import { Eye, EyeOff, UserPlus } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
@@ -7,6 +8,7 @@ import { register } from "../../services/authService";
 
 export default function RegisterPage() {
 	const navigate = useNavigate();
+	const { t, i18n } = useTranslation();
 	const { login: setAuthUser } = useAuth();
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
@@ -33,17 +35,28 @@ export default function RegisterPage() {
 
 			localStorage.setItem("token", response.token);
 			setAuthUser(response.user);
-			toast.success("Registration successful");
+			toast.success(t("notifications.success", "Registration successful"));
 			navigate("/");
 		} catch (error) {
-			toast.error(error);
+			toast.error(error || t("notifications.error", "Something went wrong. Please try again."));
 		} finally {
 			setLoading(false);
 		}
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 px-4 py-10 text-white sm:px-6 lg:px-8">
+		<div dir={i18n.dir()} className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 px-4 py-10 text-white sm:px-6 lg:px-8 relative">
+			<div className="absolute top-4 right-4 z-50">
+				<select
+					value={i18n.language?.startsWith("ml") ? "ml" : "en"}
+					onChange={(e) => i18n.changeLanguage(e.target.value)}
+					className="px-2.5 py-1.5 rounded-lg border border-white/10 bg-slate-900 text-white text-xs font-semibold outline-none cursor-pointer hover:border-white/20 transition"
+				>
+					<option value="en">English</option>
+					<option value="ml">മലയാളം</option>
+				</select>
+			</div>
+
 			<div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl items-center justify-center">
 				<div className="grid w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl shadow-cyan-950/30 backdrop-blur-xl lg:grid-cols-[1.1fr_0.9fr]">
 					<div className="hidden flex-col justify-between bg-gradient-to-br from-cyan-500/20 via-sky-500/10 to-transparent p-10 lg:flex">
@@ -53,7 +66,7 @@ export default function RegisterPage() {
 								Join the response network
 							</div>
 							<h1 className="max-w-lg text-4xl font-semibold tracking-tight text-white xl:text-5xl">
-								Kerala Disaster Intelligence Platform
+								{t("navbar.title", "Kerala Disaster Intelligence Platform")}
 							</h1>
 							<p className="mt-4 max-w-lg text-base leading-7 text-slate-300">
 								Create your account to participate in disaster response, track incidents, and coordinate action with a secure operational platform.
@@ -77,14 +90,16 @@ export default function RegisterPage() {
 								<div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-300 ring-1 ring-cyan-400/20">
 									<UserPlus className="h-7 w-7" />
 								</div>
-								<h2 className="text-3xl font-semibold tracking-tight text-white">Create Account</h2>
+								<h2 className="text-3xl font-semibold tracking-tight text-white">
+									{t("registration.title", "Register Officer Account")}
+								</h2>
 								<p className="mt-3 text-sm text-slate-400">Join Kerala Disaster Intelligence Platform</p>
 							</div>
 
 							<form onSubmit={handleSubmit} className="space-y-5">
 								<div>
 									<label htmlFor="name" className="mb-2 block text-sm font-medium text-slate-200">
-										Full Name
+										{t("registration.fullName", "Full Name")}
 									</label>
 									<input
 										id="name"
@@ -99,7 +114,7 @@ export default function RegisterPage() {
 
 								<div>
 									<label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-200">
-										Email
+										{t("registration.email", "Email Address")}
 									</label>
 									<input
 										id="email"
@@ -114,7 +129,7 @@ export default function RegisterPage() {
 
 								<div>
 									<label htmlFor="phone" className="mb-2 block text-sm font-medium text-slate-200">
-										Phone
+										{t("forms.labels.phone", "Phone Number")}
 									</label>
 									<input
 										id="phone"
@@ -144,7 +159,7 @@ export default function RegisterPage() {
 
 								<div>
 									<label htmlFor="role" className="mb-2 block text-sm font-medium text-slate-200">
-										Role
+										{t("registration.role", "Officer Role")}
 									</label>
 									<select
 										id="role"
@@ -167,7 +182,7 @@ export default function RegisterPage() {
 
 								<div>
 									<label htmlFor="password" className="mb-2 block text-sm font-medium text-slate-200">
-										Password
+										{t("registration.password", "Password")}
 									</label>
 									<div className="relative">
 										<input
@@ -193,9 +208,9 @@ export default function RegisterPage() {
 								<button
 									type="submit"
 									disabled={loading}
-									className="flex w-full items-center justify-center gap-2 rounded-2xl bg-cyan-500 px-4 py-3.5 font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-70"
+									className="flex w-full items-center justify-center gap-2 rounded-2xl bg-cyan-500 px-4 py-3.5 font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-70 border-0 cursor-pointer"
 								>
-									{loading ? "Creating Account..." : "Create Account"}
+									{loading ? "Creating Account..." : t("registration.submit", "Register")}
 								</button>
 							</form>
 
@@ -205,7 +220,7 @@ export default function RegisterPage() {
 									to="/login"
 									className="font-medium text-cyan-300 transition hover:text-cyan-200 hover:underline"
 								>
-									Login
+									{t("login.submit", "Login")}
 								</Link>
 							</p>
 						</div>

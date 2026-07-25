@@ -1,37 +1,21 @@
 import Card from "../common/Card";
 import WeatherWidget from "./widgets/WeatherWidget";
+import FleetAvailabilityWidget from "./widgets/FleetAvailabilityWidget";
+import RescueTeamStatusWidget from "./widgets/RescueTeamStatusWidget";
+import IoTSensorWidget from "./widgets/IoTSensorWidget";
+import AIDecisionWidget from "./widgets/AIDecisionWidget";
 
 const RightPanel = () => {
   return (
     <div className="space-y-5">
 
-      <Card>
+      <AIDecisionWidget />
 
-        <h3 className="font-semibold mb-4">
-          Live Alerts
-        </h3>
+      <IoTSensorWidget />
 
-        <p className="text-sm text-slate-500">
-          No active alerts.
-        </p>
+      <FleetAvailabilityWidget />
 
-      </Card>
-
-      <Card>
-
-        <h3 className="font-semibold mb-4">
-          Weather
-        </h3>
-
-        <h1 className="text-4xl font-bold">
-          29°
-        </h1>
-
-        <p className="text-slate-500">
-          Kozhikode
-        </p>
-
-      </Card>
+      <RescueTeamStatusWidget />
 
       <WeatherWidget />
 

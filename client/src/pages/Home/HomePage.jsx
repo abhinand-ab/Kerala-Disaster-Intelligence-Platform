@@ -1,5 +1,5 @@
 import MainLayout from "../../components/layout/MainLayout";
-import SectionHeader from "../../components/common/SectionHeader";
+import Header from "../../components/layout/Header";
 import StatCard from "../../components/common/StatCard";
 import MapSection from "../../components/dashboard/MapSection";
 import RightPanel from "../../components/dashboard/RightPanel";
@@ -19,7 +19,7 @@ const HomePage = () => {
 
   return (
     <MainLayout>
-      <SectionHeader
+      <Header
         title="Dashboard"
         subtitle="Real-time overview of Kerala disaster and delivery operations"
       />

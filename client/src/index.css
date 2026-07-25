@@ -1,8 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 @import "tailwindcss";
 
-/* Google Font */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@theme {
+  --font-sans: "Inter", sans-serif;
+
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --color-background-theme: var(--background);
+  --color-card-theme: var(--card);
+  --color-text-theme: var(--text);
+  --color-border-theme: var(--border);
+}
 
 :root {
   font-family: "Inter", sans-serif;
@@ -13,12 +24,20 @@
   --danger: #ef4444;
 
   --background: #f8fafc;
+  --background-light: #f1f5f9;
   --card: #ffffff;
 
   --text: #0f172a;
+  --text-dark: #1e293b;
   --text-secondary: #475569;
+  --text-muted: #94a3b8;
 
   --border: #e2e8f0;
+  --border-light: #cbd5e1;
+
+  --shadow-theme-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-theme: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-theme-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 body {
@@ -26,4 +45,5 @@ body {
   background: var(--background);
   color: var(--text);
   font-family: "Inter", sans-serif;
+  transition: background-color 155ms ease, border-color 155ms ease, color 155ms ease;
 }

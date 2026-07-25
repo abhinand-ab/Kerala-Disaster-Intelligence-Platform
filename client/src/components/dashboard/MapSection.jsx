@@ -1,10 +1,11 @@
 import Card from "../common/Card";
 import MapView from "../map/MapView";
 import LayerSwitcher from "../map/LayerSwitcher";
+import RouteInfoPanel from "../map/RouteInfoPanel";
 
 const MapSection = () => {
   return (
-    <Card className="h-[650px] flex flex-col">
+    <Card className="flex flex-col h-auto">
       {/* Header */}
       <div className="mb-4 flex items-start justify-between">
         <div className="space-y-1">
@@ -25,8 +26,11 @@ const MapSection = () => {
       </div>
 
       {/* Map */}
-      <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-slate-200">
-        <MapView />
+      <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-slate-200 flex flex-col lg:flex-row relative">
+        <div className="flex-1 h-[400px] md:h-[500px] lg:h-[600px] min-w-0">
+          <MapView />
+        </div>
+        <RouteInfoPanel />
       </div>
     </Card>
   );

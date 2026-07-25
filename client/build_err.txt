@@ -1,0 +1,16 @@
+[36mvite v8.1.0 [32mbuilding client environment for production...[36m[39m
+[2Ktransforming...✓ 730 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.45 kB │ gzip:   0.29 kB
+dist/assets/index-Buv2azbu.css    103.72 kB │ gzip:  20.57 kB
+dist/assets/index-CGfHrgMe.js   1,157.67 kB │ gzip: 288.10 kB
+
+[33m[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0msrc/services/volunteerService.js is dynamically imported by src/hooks/useVolunteers.js but also statically imported by src/hooks/useVolunteers.js, dynamic import will not move module into another chunk.
+[39m
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 1.15s[39m

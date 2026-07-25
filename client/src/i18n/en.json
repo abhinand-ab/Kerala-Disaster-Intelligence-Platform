@@ -1,0 +1,193 @@
+{
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "emergencyPortal": "Emergency Portal",
+        "crisisCommand": "Crisis Command",
+        "aiDecisions": "AI Decisions",
+        "iotSensors": "IoT Sensors",
+        "riskIntelligence": "Risk Intelligence",
+        "shelters": "Shelters",
+        "volunteers": "Volunteers",
+        "rescueTeams": "Rescue Teams",
+        "resources": "Resources",
+        "warehouses": "Warehouses",
+        "liveMap": "Live Map",
+        "floodAlerts": "Flood Alerts",
+        "incidents": "Incidents",
+        "rescueFleet": "Rescue Fleet",
+        "delivery": "Delivery",
+        "analytics": "Analytics",
+        "auditLogs": "Audit Logs",
+        "settings": "Settings"
+    },
+    "navbar": {
+        "title": "Kerala Disaster Intelligence",
+        "search": "Search..."
+    },
+    "header": {
+        "myProfile": "My Profile",
+        "settings": "Settings",
+        "logout": "Logout"
+    },
+    "dashboard": {
+        "title": "Officer Dashboard",
+        "welcome": "Welcome back, {{name}}",
+        "telemetryLogged": "System Telemetry Logged",
+        "failedLogins": "Failed Login Blockades",
+        "accountsLocked": "Accounts Locked",
+        "healthMonitor": "Forensic Node Health",
+        "notifications": "Notifications",
+        "activeAlerts": "Active Alerts"
+    },
+    "map": {
+        "title": "Interactive Disaster Map",
+        "layerNames": {
+            "districts": "District Boundaries",
+            "flood": "Flood Areas",
+            "incidents": "Disaster Incidents",
+            "shelters": "Evacuation Shelters",
+            "delivery": "Delivery Routes",
+            "aqi": "Air Quality Index",
+            "weather": "Weather Info",
+            "volunteers": "Volunteers",
+            "rescueTeams": "Rescue Teams",
+            "warehouses": "Warehouses",
+            "resources": "Resources",
+            "vehicles": "Rescue Vehicles",
+            "floodRisk": "Flood Risk Areas",
+            "landslideRisk": "Landslide Risk Areas",
+            "combinedRisk": "Combined Risk Index",
+            "heatmap": "Disaster Heatmap",
+            "historicalDisasterPoints": "Historical Disaster Points",
+            "emergencySOS": "Emergency SOS Requests",
+            "sensors": "IoT Sensors",
+            "aiRecommendations": "AI Recommendations",
+            "commandCenters": "Crisis Command Centers"
+        },
+        "legend": "Map Legend",
+        "tooltips": {
+            "clickToView": "Click to view details",
+            "lastUpdated": "Last updated"
+        },
+        "popups": {
+            "contact": "Contact",
+            "status": "Status",
+            "capacity": "Capacity",
+            "occupancy": "Occupancy",
+            "phone": "Phone",
+            "address": "Address"
+        },
+        "statusBadges": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "warning": "Warning",
+            "critical": "Critical"
+        }
+    },
+    "shelters": {
+        "title": "Evacuation Shelters",
+        "findShelter": "Find Safe Evacuation Shelters",
+        "searchPlaceholder": "Search shelters by district...",
+        "capacity": "Capacity",
+        "occupancy": "Occupancy",
+        "status": "Status"
+    },
+    "resources": {
+        "title": "Resource Inventory",
+        "searchPlaceholder": "Search items...",
+        "stock": "Stock Quantity",
+        "warehouse": "Warehouse"
+    },
+    "warehouses": {
+        "title": "Warehouses",
+        "searchPlaceholder": "Search warehouses..."
+    },
+    "vehicles": {
+        "title": "Rescue Fleet",
+        "plateNumber": "Plate Number"
+    },
+    "rescueTeams": {
+        "title": "Rescue Teams",
+        "members": "Members Count"
+    },
+    "volunteers": {
+        "title": "Volunteers",
+        "skill": "Primary Skill"
+    },
+    "incidents": {
+        "title": "Disaster Incidents",
+        "addIncident": "Add Incident"
+    },
+    "weather": {
+        "title": "Weather Intelligence",
+        "alertCreated": "Weather Alert Created",
+        "alertCleared": "Weather Alert Cleared"
+    },
+    "analytics": {
+        "title": "Advanced Analytics"
+    },
+    "audit": {
+        "title": "Audit Logs",
+        "timeline": "Timeline Audit Logs",
+        "securityAlerts": "Security & Threat Anomaly Alerts"
+    },
+    "login": {
+        "title": "Officer Login",
+        "email": "Email Address",
+        "password": "Password",
+        "submit": "Login",
+        "registerPrompt": "Don't have an account? Register"
+    },
+    "registration": {
+        "title": "Register Officer Account",
+        "fullName": "Full Name",
+        "email": "Email Address",
+        "password": "Password",
+        "role": "Officer Role",
+        "submit": "Register"
+    },
+    "forms": {
+        "labels": {
+            "name": "Name",
+            "description": "Description",
+            "category": "Category",
+            "severity": "Severity",
+            "phone": "Phone Number",
+            "address": "Address"
+        },
+        "placeholders": {
+            "enterName": "Enter name",
+            "enterDescription": "Provide details",
+            "enterPhone": "Enter phone number"
+        },
+        "buttons": {
+            "save": "Save Changes",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "submit": "Submit"
+        },
+        "validations": {
+            "required": "This field is required",
+            "invalidEmail": "Invalid email address",
+            "passwordLength": "Password must be at least 6 characters"
+        }
+    },
+    "notifications": {
+        "success": "Operation successful!",
+        "error": "Something went wrong. Please try again."
+    },
+    "public": {
+        "home": "Home",
+        "alerts": "Live Alerts",
+        "map": "Interactive Map",
+        "shelters": "Shelter Finder",
+        "education": "Prep Guides",
+        "faq": "FAQ",
+        "contacts": "Contacts",
+        "portalTitle": "CITIZEN PORTAL — VERIFIED DISASTER RESPONSE RESOURCES",
+        "officerLogin": "Officer Login",
+        "title": "Kerala Disaster Response",
+        "notice": "Notice",
+        "noticeText": "Heavy Rain Warn alerts are active for Idukki and Wayanad. Dial 1077 (District Control) to receive instant updates. Citizens stranded in flooded zones or needing urgent food shelter coordination can register SOS requests. Keep emergency kit ready with essential documents, flashlights, water, food resources."
+    }
+}

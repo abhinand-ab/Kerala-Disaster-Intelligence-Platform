@@ -1,25 +1,24 @@
-import { io } from "socket.io-client";
+import { getSocketIO } from "../sockets/socket.js";
 
 // Single shared Socket.IO client instance for the application.
-export const socket = io("http://localhost:5000", {
-	autoConnect: false,
-	withCredentials: true,
-});
+export const socket = getSocketIO();
 
 // Connect only when the socket is not already connected or connecting.
 export const connectSocket = () => {
-	if (!socket.connected && !socket.active) {
-		socket.connect();
+	const currentSocket = getSocketIO();
+	if (!currentSocket.connected && !currentSocket.active) {
+		currentSocket.connect();
 	}
 
-	return socket;
+	return currentSocket;
 };
 
 // Disconnect safely without creating duplicate connections on reconnect.
 export const disconnectSocket = () => {
-	if (socket.connected || socket.active) {
-		socket.disconnect();
+	const currentSocket = getSocketIO();
+	if (currentSocket.connected || currentSocket.active) {
+		currentSocket.disconnect();
 	}
 
-	return socket;
+	return currentSocket;
 };

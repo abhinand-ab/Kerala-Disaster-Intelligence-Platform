@@ -11,22 +11,14 @@ const SectionHeader = ({ title, subtitle }) => {
   const { user, logout } = useAuth();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
-  const handleProfileClick = () => {
-    navigate("/profile");
-  };
-
-  const handleLogoutClick = async () => {
-    await logout();
-    navigate("/login");
-  };
-
+  const handleProfileClick = () => navigate("/profile");
+  const handleLogoutClick = async () => { await logout(); navigate("/login"); };
   const userName = user?.name || user?.fullName || [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "User";
 
   return (
     <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <div>
         <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
-
         <p className="mt-1 text-slate-500">{subtitle}</p>
       </div>
 
@@ -37,15 +29,8 @@ const SectionHeader = ({ title, subtitle }) => {
 
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="relative">
-            <NotificationBell
-              isOpen={isNotificationOpen}
-              setIsOpen={setIsNotificationOpen}
-            />
-
-            <NotificationDropdown
-              isOpen={isNotificationOpen}
-              setIsOpen={setIsNotificationOpen}
-            />
+            <NotificationBell isOpen={isNotificationOpen} setIsOpen={setIsNotificationOpen} />
+            <NotificationDropdown isOpen={isNotificationOpen} setIsOpen={setIsNotificationOpen} />
           </div>
 
           <button

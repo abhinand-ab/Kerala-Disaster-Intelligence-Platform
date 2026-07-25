@@ -4,10 +4,10 @@ const Card = ({ children, className = "" }) => {
       className={`
         bg-white
         rounded-2xl
-        border
-        border-slate-200
+        border border-slate-200
         shadow-sm
         p-6
+        text-slate-800
         ${className}
       `}
     >

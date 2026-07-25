@@ -7,9 +7,7 @@ const colors = {
 
 const Badge = ({ children, color = "info" }) => {
   return (
-    <span
-      className={`px-3 py-1 rounded-full text-xs font-semibold ${colors[color]}`}
-    >
+    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${colors[color]}`}>
       {children}
     </span>
   );
